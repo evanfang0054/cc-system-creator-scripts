@@ -43,7 +43,7 @@ license: 完整条款请见 LICENSE.txt
 
 ### 技能的构成结构
 
-每个技能都由必需的SKILL.md文件和可选的捆绑资源组成：
+每个技能都由必需的SKILL.md文件和可选的references组成：
 
 ```text
 skill-name/
@@ -52,7 +52,7 @@ skill-name/
 │   │   ├── name: (必需)
 │   │   └── description: (必需)
 │   └── Markdown指令 (必需)
-└── 捆绑资源 (可选)
+└── references (可选)
     ├── scripts/          - 可执行代码 (TypeScript/Node.js/etc.)
     ├── references/       - 根据需要加载到上下文中的文档
     └── assets/           - 输出中使用的文件 (模板、图标、字体等)
@@ -65,7 +65,7 @@ skill-name/
 - **前置元数据** (YAML)：包含`name`和`description`字段。这些是Claude读取以确定何时使用技能的唯一字段，因此在描述技能是什么以及何时应该使用时，清晰和全面非常重要。
 - **正文** (Markdown)：使用技能的指令和指导。仅在技能触发后加载（如果有的话）。
 
-#### 捆绑资源 (可选)
+#### references (可选)
 
 ##### Scripts (`scripts/`)
 
@@ -114,7 +114,7 @@ skill-name/
 
 1. **元数据（名称 + 描述）** - 始终在上下文中（约100字）
 2. **SKILL.md正文** - 当技能触发时（<5k字）
-3. **捆绑资源** - 根据Claude需要（无限制，因为脚本可以在不读取到上下文窗口的情况下执行）
+3. **references** - 根据Claude需要（无限制，因为脚本可以在不读取到上下文窗口的情况下执行）
 
 #### 渐进式披露模式
 
@@ -316,7 +316,7 @@ npx ts-node .claude/skills/skill-creator/scripts/init_skill.ts <skill-name> --pa
 
 ##### 正文
 
-编写使用技能及其捆绑资源的指令。
+编写使用技能及其references的指令。
 
 ### 步骤5：打包技能
 
@@ -353,5 +353,5 @@ npx ts-node .claude/skills/skill-creator/scripts/package_skill.ts <path/to/skill
 
 1. 在实际任务上使用技能
 2. 注意到困难或效率低下
-3. 识别SKILL.md或捆绑资源应该如何更新
+3. 识别SKILL.md或references应该如何更新
 4. 实施更改并再次测试

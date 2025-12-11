@@ -64,7 +64,7 @@ description: [TODO: 完整且信息丰富的说明，解释该 skill 的功能�
 
 ## 资源
 
-该 skill 包含示例资源目录，展示如何组织不同类型的捆绑资源：
+该 skill 包含示例资源目录，展示如何组织不同类型的references：
 
 ### scripts/
 可执行代码（TypeScript/JavaScript/Bash 等），可以直接运行以执行特定操作。
