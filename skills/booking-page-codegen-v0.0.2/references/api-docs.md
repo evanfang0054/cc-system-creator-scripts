@@ -1,0 +1,33 @@
+# SAAS国际会员中心H5
+
+## API Docs
+- 标准h5 > 权益/订单查询相关接口 > 标准h5-权益模块 [获取会籍下可用权益列表](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3522213.md): 
+- 标准h5 > 权益/订单查询相关接口 > 标准h5-订单模块 [标准h5分页获取会籍已完成/已取消/订单关闭的订单列表（使用历史）](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3521845.md): 目前支持品类 国际休息室
+- 标准h5 > 权益/订单查询相关接口 > 标准h5-订单模块 [标准h5 预订单列表](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3521846.md): 目前支持品类 国际休息室
+- 标准h5 > 权益/订单查询相关接口 > 标准h5-订单模块 [标准h5 订单详情](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525358.md): 
+- 标准h5 > 权益/订单查询相关接口 > 会籍模块 [获取会籍详情](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3522167.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 站点模块 [站点列表- 单品类-项目维度](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525160.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 站点模块 [站点列表 - 用户当前位置所在城市下所有站点-非项目维度](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525159.md): 非项目维度
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 认证模块 [登录-老接口-测试用](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3520709.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 短链免登模块 [短链免登获取token](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3520711.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 短链免登模块 [标准h5凭证页配置](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3520715.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 短链免登模块 [获取凭证页二维码](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3521025.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 短链免登模块 [标准h5登录页配置](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525382.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [资源列表](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525336.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [资源详情](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [协议包内容](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525414.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [获取可选日期列表](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525482.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [获取指定日期或日期范围内的可预约时段](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525485.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [获取指定时间段的周围（前3后3个时间段）推荐可预约时段](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3527720.md): 
+- 标准h5 > 短链登录、核销二维码、站点、网点相关相关接口 > 资源模块 [获取指定商品详情](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3526488.md): 
+- 标准h5 > 新版免登/token相关 > 会员会籍免登接口/token接口 [国际标准h5token 会籍/会员维度](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525123.md): 
+- 标准h5 > 新版免登/token相关 > 会员会籍免登接口/token接口 [h5获取会员/会籍跳转 免登链接##get_login_free_redirect_url](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525124.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [H5-FT预定订单下单->预约商品下单](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525902.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [H5-FT->价格计算](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3526503.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [H5-FT/Lounge 预定下单前锁容量token](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3527718.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [现金支付完成-确认订单](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3527719.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [标准h5 取消订单](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525199.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [第三方现金支付订单回调接口](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525901.md): 
+- 标准h5 > 订单创单/取消相关 > 订单下单模块 [H5-订单确认页 -> 获取支付展示信息（Payment 模块数据）](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3529699.md): <p>
+- 标准h5 > 订单创单/取消相关 > 站点模块 [站点列表- 单品类-项目维度](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525853.md): 
+- 标准h5 > 订单创单/取消相关 > 站点模块 [站点列表 - 用户当前位置所在城市下所有站点-非项目维度](https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525854.md): 

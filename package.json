@@ -1,0 +1,35 @@
+{
+  "name": "cc-system-creator-scripts",
+  "version": "1.0.0",
+  "description": "CC System Creator Scripts是一个专门为 Claude Code 设计的元框架，通过模块化、可重用的组件和自动化工作流来增强其功能。该系统让您能够创建专业级 AI 技能、管理专业化的代理，并编排复杂的多代理工作流",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node"
+  },
+  "keywords": ["cc-system", "creator", "claude", "typescript"],
+  "author": "Evan Fang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evanfang0054/cc-system-creator-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evanfang0054/cc-system-creator-scripts/issues"
+  },
+  "homepage": "https://github.com/evanfang0054/cc-system-creator-scripts#readme",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/archiver": "^6.0.2",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "archiver": "^6.0.1"
+  },
+  "optionalDependencies": {
+    "yazl": "^2.5.1"
+  }
+}
