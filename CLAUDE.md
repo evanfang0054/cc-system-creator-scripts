@@ -190,3 +190,11 @@ git commit -m "中文提交信息"
 # 查看中文日志
 git log --pretty=format:"%h %s" --graph
 ```
+
+### 重要注意事项
+
+生成commit message时，不要提交Claude Code相关的信息，例如
+
+**坏的**
+Generated with [Claude Code](https://claude.com/claude-code)
+Co-Authored-By: Claude <noreply@anthropic.com>
