@@ -1,0 +1,32 @@
+# 中文 Git 提交模板
+
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+
+# Type 类型说明:
+# feat: 新功能
+# fix: 修复问题
+# docs: 文档更新
+# style: 代码格式调整
+# refactor: 代码重构
+# perf: 性能优化
+# test: 测试相关
+# chore: 构建工具、依赖更新等
+# workflow: 工作流改进
+
+# 示例:
+# feat(agents): 添加新的需求分析代理
+#
+# - 实现Gherkin需求解析功能
+# - 支持多语言需求分析
+# - 集成到现有的工作流中
+#
+# Closes #123
+
+# 注意事项:
+# 1. subject 使用动词开头，简洁描述
+# 2. body 详细说明改动内容和原因
+# 3. footer 引用相关Issue或注明破坏性变动
