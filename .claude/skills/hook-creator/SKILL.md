@@ -10,7 +10,7 @@ description: 创建和配置 Claude Code 钩子以自定义代理行为。当用
 ## 钩子创建工作流程
 
 1. **确定使用场景** - 明确钩子需要完成的功能
-2. **选择合适的事件** - 从可用的钩子事件中选择（参见 references/hook-events.zh-CN.md）
+2. **选择合适的事件** - 从可用的钩子事件中选择（参见 references/hook-events.md）
 3. **设计钩子命令** - 编写从 stdin 处理 JSON 输入的 shell 命令
 4. **配置匹配器** - 设置工具/事件过滤器（使用 `*` 匹配所有，或指定工具名称如 `Bash`、`Edit|Write`）
 5. **选择存储位置** - 用户设置（`~/.claude/settings.json`）或项目（`.claude/settings.json`）
@@ -87,5 +87,5 @@ python3 -c "import json,sys; p=json.load(sys.stdin).get('tool_input',{}).get('fi
 
 ## 资源文档
 
-- **钩子事件参考**：查看 `references/hook-events.zh-CN.md` 了解详细的事件文档，包含输入/输出架构
-- **示例配置**：查看 `references/examples.zh-CN.md` 获取完整的、经过测试的钩子配置
+- **钩子事件参考**：查看 `references/hook-events.md` 了解详细的事件文档，包含输入/输出架构
+- **示例配置**：查看 `references/examples.md` 获取完整的、经过测试的钩子配置
