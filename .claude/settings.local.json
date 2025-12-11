@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm run validate:*)",
+      "Bash(pnpm run init:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(node:*)",
+      "Bash(unzip:*)",
+      "Bash(tree:*)",
+      "Skill(subagent-creator)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
