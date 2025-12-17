@@ -9,7 +9,17 @@
       "Bash(node:*)",
       "Bash(unzip:*)",
       "Bash(tree:*)",
-      "Skill(subagent-creator)"
+      "Skill(subagent-creator)",
+      "Bash(git commit:*)",
+      "mcp__zai-mcp-server__understand_technical_diagram",
+      "WebSearch",
+      "mcp__web-search-prime__webSearchPrime",
+      "Skill(prompt-engineering-patterns)",
+      "Skill(mcp-builder)",
+      "mcp__mastra-docs__mastraDocs",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "mcp__apifox-api-docs__get_api_list",
+      "mcp__apifox-api-docs__get_api_detail"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,35 @@
+{
+  "name": "apifox-api-docs-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for fetching Apifox API documentation",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-esm src/index.ts",
+    "inspector": "mcp-inspector",
+    "debug:apifox": "pnpm build && mcp-inspector dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "apifox",
+    "api",
+    "documentation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@types/jsdom": "^27.0.0",
+    "dotenv": "^17.2.3",
+    "jsdom": "^27.3.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.18.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

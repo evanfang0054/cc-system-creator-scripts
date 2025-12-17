@@ -25,10 +25,17 @@ cc-system/
 │   ├── booking-ui-interaction-expert.md
 │   ├── booking-code-integrator.md
 │   └── booking-test-validator.md
-└── skills/                     # 项目特定技能
-    ├── booking-page-codegen-v0.0.1/
-    ├── booking-page-codegen-v0.0.2/
-    └── booking-page-codegen-v0.0.3/
+├── skills/                     # 项目特定技能
+│   ├── booking-page-codegen-v0.0.1/
+│   ├── booking-page-codegen-v0.0.2/
+│   └── booking-page-codegen-v0.0.3/
+└── mcp/                        # MCP 服务器项目
+    └── apifox-api-docs-mcp/    # Apifox API 文档 MCP 服务器
+        ├── src/                # 源代码
+        ├── dist/               # 构建输出
+        ├── DEBUG.md            # 调试指南
+        ├── example-usage.md    # 使用示例
+        └── package.json        # 项目配置
 ```
 
 ### 核心组件
@@ -48,6 +55,11 @@ cc-system/
    - 按顺序协调 5 个专业代理
    - 版本控制的技能迭代 (v0.0.1, v0.0.2, v0.0.3)
 
+4. **MCP 服务器** (`mcp/apifox-api-docs-mcp/`)
+   - 专门用于获取 Apifox API 文档的 MCP (Model Context Protocol) 服务器
+   - 提供 `get_api_list` 和 `get_api_detail` 两个核心工具
+   - 支持环境变量配置和本地化开发调试
+
 ## 开发命令
 
 ```bash
@@ -62,6 +74,13 @@ npx ts-node .claude/skills/skill-creator/scripts/init_skill.ts <skill-name> --pa
 
 # 打包现有技能（示例）
 npx ts-node .claude/skills/skill-creator/scripts/package_skill.ts <path/to/skill-folder>
+
+# MCP 服务器开发（在 mcp/apifox-api-docs-mcp 目录下）
+cd mcp/apifox-api-docs-mcp
+pnpm install              # 安装依赖
+pnpm build               # 构建 MCP 服务器
+pnpm debug:apifox        # 启动调试会话
+pnpm inspector           # 启动 MCP Inspector
 ```
 
 ## 关键模式
@@ -96,6 +115,8 @@ Claude Code 已配置以下权限：
 - TypeScript 执行 (`npx ts-node:*`, `node:*`)
 - 归档操作 (`unzip:*`, `tree:*`)
 - 技能使用 (`Skill(subagent-creator)`)
+- Web 搜索和 MCP 工具使用
+- 诊断和代码分析工具
 
 ## 技术栈
 
@@ -104,16 +125,20 @@ Claude Code 已配置以下权限：
 - **构建系统**：带 CommonJS 输出的 TypeScript 编译器
 - **核心库**：js-yaml, archiver
 - **开发**：用于 TypeScript 执行的 ts-node
+- **MCP 开发**：@modelcontextprotocol/sdk, @modelcontextprotocol/inspector
+- **文档管理**：支持多语言文档和调试指南
 
 ## 开发工作流
 
 1. **技能创建**：使用带模板的 skill-creator 框架
 2. **代理开发**：使用带 YAML 配置的 subagent-creator
 3. **工作流实现**：创建协调多个代理的技能
-4. **测试与验证**：内置技能验证和打包
-5. **分发**：创建用于共享的 .skill 文件
+4. **MCP 服务开发**：使用标准 MCP SDK 创建专用服务器
+5. **测试与验证**：内置技能验证和打包，包含 MCP Inspector 调试
+6. **文档管理**：中文化文档和统一调试指南
+7. **分发**：创建用于共享的 .skill 文件
 
-该系统在 Claude Code 中实现企业级 AI 工作流自动化和标准化开发流程。
+该系统在 Claude Code 中实现企业级 AI 工作流自动化和标准化开发流程，同时提供完整的 MCP 生态系统支持。
 
 ## Git 中文提交规范
 
