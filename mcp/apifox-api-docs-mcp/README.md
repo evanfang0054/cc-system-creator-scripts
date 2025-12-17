@@ -153,7 +153,7 @@ claude mcp add apifox-api-docs node /Users/arwen/Desktop/Arwen/Demo/cc-system/mc
 
 ### 3. 配置文件方式
 
-在 `.claude/settings.local.json` 中添加：
+在 `.claude/.mcp.json` 中添加：
 
 ```json
 {
@@ -162,7 +162,8 @@ claude mcp add apifox-api-docs node /Users/arwen/Desktop/Arwen/Demo/cc-system/mc
       "command": "node",
       "args": ["/Users/arwen/Desktop/Arwen/Demo/cc-system/mcp/apifox-api-docs-mcp/dist/index.js"],
       "env": {
-        "APIFOX_API_KEY": "your-api-key-here"
+        "APIFOX_API_KEY": "your-api-key-here",
+        "APIFOX_API_URL": "your-api-url"
       }
     }
   }
