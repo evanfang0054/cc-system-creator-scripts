@@ -77,7 +77,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: hasDefaultKey
                 ? 'Apifox API 文档的 URL 或 Key (可选，如不提供则使用已配置的默认 Key)'
-                : 'Apifox API 文档的 URL (如: https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338) 或直接的 Key (如: 99e805b6-d781-40bf-aad5-f8e1151ea228)'
+                : 'Apifox API 文档的 URL (如: https://apifox.evanfang.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338) 或直接的 Key (如: 99e805b6-d781-40bf-aad5-f8e1151ea228)'
             }
           },
           required: hasDefaultKey ? [] : ['input']

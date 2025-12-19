@@ -4,6 +4,9 @@
   "description": "MCP server for fetching Apifox API documentation",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "apifox-api-docs-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",

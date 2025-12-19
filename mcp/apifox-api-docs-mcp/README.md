@@ -11,7 +11,7 @@
 
 **输入参数：**
 - `input`: Apifox API 文档的 URL 或直接的 Key (可选)
-  - URL 示例：`https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338`
+  - URL 示例：`https://apifox.evanfang.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338`
   - Key 示例：`99e805b6-d781-40bf-aad5-f8e1151ea228`
 
 **输出：**
@@ -55,7 +55,7 @@ APIFOX_API_KEY=99e805b6-d781-40bf-aad5-f8e1151ea228
 
 **示例链接格式：**
 ```
-https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338
+https://apifox.evanfang.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338
 ```
 其中 `99e805b6-d781-40bf-aad5-f8e1151ea228` 就是要使用的 APIFOX_API_KEY
 
@@ -204,7 +204,7 @@ apiId: get_user_list
 或使用完整 URL：
 ```
 请使用 get_api_list 工具获取这个 Apifox 文档的接口列表：
-https://apifox.dragonpass.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338
+https://apifox.evanfang.com.cn/apidoc/shared/99e805b6-d781-40bf-aad5-f8e1151ea228/api-3525338
 ```
 
 #### 获取 API 详情
@@ -294,7 +294,6 @@ apifox-api-docs-mcp/
 ├── src/
 │   ├── index.ts          # MCP 服务入口
 │   ├── apifox-client.ts  # Apifox API 客户端
-│   ├── html-cleaner.ts   # HTML 清理工具
 │   └── types.ts          # 类型定义
 ├── dist/                 # 构建输出
 ├── package.json          # 项目配置

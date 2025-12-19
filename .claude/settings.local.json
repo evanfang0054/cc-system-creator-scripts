@@ -19,7 +19,8 @@
       "mcp__mastra-docs__mastraDocs",
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__apifox-api-docs__get_api_list",
-      "mcp__apifox-api-docs__get_api_detail"
+      "mcp__apifox-api-docs__get_api_detail",
+      "Skill(skill-creator)"
     ],
     "deny": [],
     "ask": []

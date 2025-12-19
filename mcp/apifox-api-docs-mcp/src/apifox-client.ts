@@ -1,12 +1,11 @@
 import { ApiResponse, ApiInfo } from './types.js';
-import { cleanContent, hasHtmlTags } from './html-cleaner.js';
 
 export class ApifoxClient {
   private baseUrl: string;
 
   constructor() {
     // 从环境变量获取基础 URL，如果没有则使用默认值
-    this.baseUrl = process.env.APIFOX_BASE_URL || 'https://apifox.dragonpass.com.cn';
+    this.baseUrl = process.env.APIFOX_BASE_URL || 'https://apifox.evanfang.com.cn';
   }
 
   /**
@@ -42,7 +41,7 @@ export class ApifoxClient {
    * 构建 API 详细文档的 URL
    */
   buildApiDetailUrl(key: string, apiId: string): string {
-    return `${this.baseUrl}/apidoc/shared/${key}/api-${apiId}`;
+    return `${this.baseUrl}/apidoc/shared/${key}/api-${apiId}.md`;
   }
 
   /**
@@ -84,11 +83,6 @@ export class ApifoxClient {
       }
 
       let content = await response.text();
-
-      // 清理 HTML 内容，提取纯文本
-      if (hasHtmlTags(content)) {
-        content = cleanContent(content);
-      }
 
       return {
         success: true,

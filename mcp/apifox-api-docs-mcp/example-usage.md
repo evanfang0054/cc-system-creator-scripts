@@ -121,7 +121,7 @@ apiId: invalid_id
 ```bash
 # 使用临时的不同 Key
 请使用 get_api_list 工具获取这个项目的 API 列表：
-https://apifox.dragonpass.com.cn/apidoc/shared/another-key-123/api-456
+https://apifox.evanfang.com.cn/apidoc/shared/another-key-123/api-456
 ```
 
 ### 批量分析
