@@ -1,99 +1,137 @@
-import { ApiResponse, ApiInfo } from './types.js';
+/**
+ * Apifox API 客户端（简化版）
+ */
+
+import { ApiResponse, RequestConfig } from './types.js';
+import { McpError, McpErrorCode } from './errors.js';
 
 export class ApifoxClient {
-  private baseUrl: string;
+  private readonly baseUrl: string;
+  private readonly defaultConfig: RequestConfig;
 
   constructor() {
-    // 从环境变量获取基础 URL，如果没有则使用默认值
     this.baseUrl = process.env.APIFOX_BASE_URL || 'https://apifox.evanfang.com.cn';
+    this.defaultConfig = {
+      timeout: parseInt(process.env.APIFOX_TIMEOUT || '10000'),
+      retries: parseInt(process.env.APIFOX_RETRIES || '2'),
+    };
   }
 
   /**
-   * 从 URL 或直接的 key 中提取 Apifox key
+   * 验证和提取 Apifox Key
    */
   extractKey(input: string): string {
-    // 如果是完整 URL，提取其中的 key
-    if (input.includes('/apidoc/shared/')) {
-      const match = input.match(/shared\/([a-f0-9-]{36})/);
-      if (match) {
-        return match[1];
+    const trimmed = input.trim();
+
+    // 从 URL 中提取 UUID
+    const match = trimmed.match(/([a-f0-9-]{36})/i);
+    if (match && match[1]) {
+      return match[1];
+    }
+
+    // 验证是否为直接提供的 UUID
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(trimmed)) {
+      return trimmed;
+    }
+
+    throw new McpError('无效的 Apifox Key 或 URL 格式', McpErrorCode.InvalidParams, {
+      input: trimmed.substring(0, 50),
+      expected: 'UUID 或完整 URL (如 https://domain.com/apidoc/shared/{UUID})'
+    });
+  }
+
+  /**
+   * 带重试机制的 HTTP 请求
+   */
+  private async fetchWithRetry(url: string, config: RequestConfig = {}): Promise<string> {
+    const { timeout = this.defaultConfig.timeout || 10000, retries = this.defaultConfig.retries || 2 } = config;
+
+    for (let attempt = 0; attempt <= retries!; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          // 4xx 错误不重试
+          if (response.status < 500) {
+            throw new McpError(`HTTP ${response.status}: ${response.statusText}`, McpErrorCode.InternalError);
+          }
+          // 5xx 错误可以重试
+          if (attempt < retries!) {
+            await this.delay(1000 * Math.pow(2, attempt)); // 指数退避
+            continue;
+          }
+          throw new McpError(`HTTP ${response.status}: ${response.statusText}`, McpErrorCode.InternalError);
+        }
+
+        const text = await response.text();
+        if (!text.trim()) {
+          throw new McpError('API 返回内容为空', McpErrorCode.InternalError);
+        }
+        return text;
+
+      } catch (error) {
+        if (error instanceof McpError) throw error;
+
+        // 最后一次尝试或不可重试的错误
+        if (attempt === retries! || (error instanceof Error && error.name === 'AbortError')) {
+          throw new McpError(
+            error instanceof Error && error.name === 'AbortError' ? `请求超时 (${timeout}ms)` : `网络请求失败: ${error instanceof Error ? error.message : String(error)}`,
+            McpErrorCode.InternalError
+          );
+        }
+
+        // 等待后重试
+        await this.delay(1000 * Math.pow(2, attempt));
       }
-      throw new Error('无法从 URL 中提取有效的 Apifox key');
     }
 
-    // 如果是直接的 key 格式验证
-    const keyPattern = /^[a-f0-9-]{36}$/;
-    if (keyPattern.test(input)) {
-      return input;
-    }
-
-    throw new Error('输入的 key 格式不正确，应为 36 位 UUID 格式');
+    throw new McpError('请求失败', McpErrorCode.InternalError);
   }
 
   /**
-   * 构建 llms.txt 文件的 URL
+   * 延迟函数
    */
-  buildLlmsUrl(key: string): string {
-    return `${this.baseUrl}/apidoc/shared/${key}/llms.txt`;
-  }
-
-  /**
-   * 构建 API 详细文档的 URL
-   */
-  buildApiDetailUrl(key: string, apiId: string): string {
-    return `${this.baseUrl}/apidoc/shared/${key}/api-${apiId}.md`;
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
    * 获取 API 列表
    */
-  async getApiList(key: string): Promise<ApiResponse> {
+  async getApiList(key: string, config?: RequestConfig): Promise<ApiResponse> {
     try {
-      const url = this.buildLlmsUrl(key);
-      const response = await fetch(url);
+      const validKey = this.extractKey(key);
+      const url = `${this.baseUrl}/apidoc/shared/${validKey}/llms.txt`;
+      const data = await this.fetchWithRetry(url, config);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const content = await response.text();
-
-      return {
-        success: true,
-        data: content
-      };
+      return { success: true, data };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '未知错误'
+        error: error instanceof McpError ? error.message : `请求失败: ${String(error)}`
       };
     }
   }
 
   /**
-   * 获取 API 详细文档
+   * 获取 API 详情
    */
-  async getApiDetail(key: string, apiId: string): Promise<ApiResponse> {
+  async getApiDetail(key: string, apiId: string, config?: RequestConfig): Promise<ApiResponse> {
     try {
-      const url = this.buildApiDetailUrl(key, apiId);
-      const response = await fetch(url);
+      const validKey = this.extractKey(key);
+      const url = `${this.baseUrl}/apidoc/shared/${validKey}/api-${apiId}.md`;
+      const data = await this.fetchWithRetry(url, config);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      let content = await response.text();
-
-      return {
-        success: true,
-        data: content
-      };
+      return { success: true, data };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '未知错误'
+        error: error instanceof McpError ? error.message : `请求失败: ${String(error)}`
       };
     }
   }
-
-  }
+}
