@@ -21,9 +21,21 @@
       "mcp__apifox-api-docs__get_api_list",
       "mcp__apifox-api-docs__get_api_detail",
       "Skill(skill-creator)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "mcp__apifox-api-docs-mcp__get_api_list",
+      "mcp__apifox-api-docs-mcp__get_api_detail",
+      "Bash(nvm use 18.18.0)",
+      "Bash(pnpm link:*)",
+      "Bash(npm link)",
+      "Bash(npm link:*)",
+      "Bash(npm:*)",
+      "Bash(pnpm:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "apifox-api-docs-mcp"
+  ]
 }
