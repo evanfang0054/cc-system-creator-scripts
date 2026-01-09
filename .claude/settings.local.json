@@ -29,7 +29,8 @@
       "Bash(npm link)",
       "Bash(npm link:*)",
       "Bash(npm:*)",
-      "Bash(pnpm:*)"
+      "Bash(pnpm:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
