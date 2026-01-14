@@ -30,7 +30,9 @@
       "Bash(npm link:*)",
       "Bash(npm:*)",
       "Bash(pnpm:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git push:*)",
+      "Skill(doc-learner)"
     ],
     "deny": [],
     "ask": []
