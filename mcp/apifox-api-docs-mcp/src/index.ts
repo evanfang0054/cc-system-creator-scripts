@@ -10,6 +10,8 @@ import { CallToolRequestSchema, ListToolsRequestSchema, Tool } from '@modelconte
 import { z } from 'zod';
 import { ApifoxClient } from './apifox-client.js';
 import { ValidationError } from './errors.js';
+import { resolveApiKey, hasDefaultApiKey, formatSuccessResponse, formatErrorResponse, formatZodError, formatServerError, configManager } from './utils/index.js';
+import { API_TIMEOUT, API_RETRIES, API_KEY_VALIDATION } from './utils/constants.js';
 import { createRequire } from 'module';
 
 // 读取 package.json 获取版本号
@@ -21,7 +23,7 @@ const SERVER_VERSION = packageJson.version;
 // 环境变量加载（条件性支持 .env）
 // ============================================================================
 
-const hasEnvFromClient = !!process.env.APIFOX_API_KEY;
+const hasEnvFromClient = hasDefaultApiKey();
 
 // 本地开发模式下加载 .env
 if (!hasEnvFromClient) {
@@ -41,8 +43,8 @@ if (!hasEnvFromClient) {
 // ============================================================================
 
 const apifoxClient = new ApifoxClient();
-const hasApiKey = !!process.env.APIFOX_API_KEY;
-const baseUrl = process.env.APIFOX_BASE_URL || 'https://apifox.evanfang.com.cn';
+const hasApiKey = hasDefaultApiKey();
+const baseUrl = configManager.getBaseUrl();
 
 const server = new Server(
   {
@@ -66,34 +68,38 @@ const TOOLS = {
     name: 'get_api_list',
     description: `获取 Apifox API 文档的接口列表
 
-功能特性：
-- 支持完整 URL 和 UUID Key 格式
+## 何时使用
+- 需要获取 API 文档的完整接口列表时
+- 需要获取 API ID 列表以调用 get_api_detail 时
+
+## 使用说明
+- 支持 UUID 或完整 URL 格式
 - 自动错误重试和超时控制
-- 获取完整的 API 接口列表
+- ${hasApiKey ? '已配置默认 API Key，input 参数可选' : '⚠️ 未配置默认 Key，input 参数必需'}
 
-${hasApiKey ? '✅ 已配置默认 API Key' : '⚠️ 需要提供 API Key 或 URL'}
+## 参数说明
+- input: Apifox URL 或 UUID ${hasApiKey ? '(可选)' : '(必需)'}
+- timeout: 超时时间（默认 ${API_TIMEOUT.DEFAULT}ms，范围 ${API_TIMEOUT.MIN}-${API_TIMEOUT.MAX}）
+- retries: 重试次数（默认 ${API_RETRIES.DEFAULT}，范围 ${API_RETRIES.MIN}-${API_RETRIES.MAX}）
 
-支持格式：
-- UUID: 00000000-0000-0000-0000-000000000000
-- 完整 URL: ${baseUrl}/apidoc/shared/{UUID}`,
+## 重要提示
+必须先调用此工具获取有效的 apiId，才能使用 get_api_detail 获取具体 API 详情。`,
     inputSchema: {
       type: 'object' as const,
       properties: {
         input: {
           type: 'string' as const,
-          description: hasApiKey
-            ? 'Apifox API 文档的 URL 或 UUID Key (可选，如不提供则使用已配置的默认 Key)'
-            : 'Apifox API 文档的 URL 或 UUID Key (必需)',
+          description: `Apifox API 文档的 URL 或 UUID ${hasApiKey ? '(可选，默认使用已配置 Key)' : '(必需)'}`,
         },
         timeout: {
           type: 'number' as const,
-          description: '请求超时时间（毫秒，1000-60000，默认 10000）',
-          default: 10000,
+          description: `请求超时时间（毫秒，${API_TIMEOUT.MIN}-${API_TIMEOUT.MAX}，默认 ${API_TIMEOUT.DEFAULT}）`,
+          default: API_TIMEOUT.DEFAULT,
         },
         retries: {
           type: 'number' as const,
-          description: '重试次数（0-5，默认 2）',
-          default: 2,
+          description: `重试次数（${API_RETRIES.MIN}-${API_RETRIES.MAX}，默认 ${API_RETRIES.DEFAULT}）`,
+          default: API_RETRIES.DEFAULT,
         },
       },
     },
@@ -102,20 +108,34 @@ ${hasApiKey ? '✅ 已配置默认 API Key' : '⚠️ 需要提供 API Key 或 U
     name: 'get_api_detail',
     description: `获取指定 API 的详细文档信息
 
-功能特性：
-- 自动错误重试和恢复
-- 详细的参数验证
+## 何时使用
+- 已通过 get_api_list 获取到 apiId 后
+- 需要查看特定 API 的详细文档时
 
-使用建议：
-建议先调用 \`get_api_list\` 获取可用的 apiId 列表，然后使用有效的 apiId 调用此工具。`,
+## 何时不使用
+- 未调用 get_api_list 之前（apiId 无效）
+- 只需要 API 列表而不需要详情时
+
+## 使用说明
+- 自动错误重试和参数验证
+- 必须使用 get_api_list 返回文档中存在的 apiId
+
+## 参数说明
+- key: Apifox API 文档的 Key ${hasApiKey ? '(可选)' : '(必需)'}
+- apiId: API 接口 ID（必需，必须是 get_api_list 返回文档中存在的 API）
+- timeout: 超时时间（默认 ${API_TIMEOUT.DEFAULT}ms，范围 ${API_TIMEOUT.MIN}-${API_TIMEOUT.MAX}）
+- retries: 重试次数（默认 ${API_RETRIES.DEFAULT}，范围 ${API_RETRIES.MIN}-${API_RETRIES.MAX}）
+
+## 使用流程
+1. 先调用 get_api_list 获取 API 列表
+2. 从返回的文档中找到需要的 apiId
+3. 使用有效的 apiId 调用此工具获取详情`,
     inputSchema: {
       type: 'object' as const,
       properties: {
         key: {
           type: 'string' as const,
-          description: hasApiKey
-            ? 'Apifox API 文档的 Key (可选，如不提供则使用已配置的默认 Key)'
-            : 'Apifox API 文档的 Key (必需)',
+          description: `Apifox API 文档的 Key ${hasApiKey ? '(可选)' : '(必需)'}`,
         },
         apiId: {
           type: 'string' as const,
@@ -123,13 +143,13 @@ ${hasApiKey ? '✅ 已配置默认 API Key' : '⚠️ 需要提供 API Key 或 U
         },
         timeout: {
           type: 'number' as const,
-          description: '请求超时时间（毫秒，1000-60000，默认 10000）',
-          default: 10000,
+          description: `请求超时时间（毫秒，${API_TIMEOUT.MIN}-${API_TIMEOUT.MAX}，默认 ${API_TIMEOUT.DEFAULT}）`,
+          default: API_TIMEOUT.DEFAULT,
         },
         retries: {
           type: 'number' as const,
-          description: '重试次数（0-5，默认 2）',
-          default: 2,
+          description: `重试次数（${API_RETRIES.MIN}-${API_RETRIES.MAX}，默认 ${API_RETRIES.DEFAULT}）`,
+          default: API_RETRIES.DEFAULT,
         },
       },
       required: ['apiId'] as const,
@@ -137,7 +157,22 @@ ${hasApiKey ? '✅ 已配置默认 API Key' : '⚠️ 需要提供 API Key 或 U
   },
   healthCheck: {
     name: 'health_check',
-    description: `检查 MCP 服务器和配置状态,当前版本${SERVER_VERSION}`,
+    description: `检查 MCP 服务器和配置状态
+
+## 何时使用
+- 需要验证服务器是否正常运行时
+- 需要检查配置状态（API Key、版本号等）时
+- 遇到问题时排查环境配置
+
+## 返回信息
+- 服务器版本
+- 基础 URL
+- API Key 配置状态
+- Node 环境
+- 可用工具数量
+
+## 参数说明
+无参数`,
     inputSchema: {
       type: 'object' as const,
       properties: {},
@@ -147,16 +182,16 @@ ${hasApiKey ? '✅ 已配置默认 API Key' : '⚠️ 需要提供 API Key 或 U
 
 // Zod Schema 用于运行时验证
 const GetApiListSchema = z.object({
-  input: z.string().min(1).max(1000).optional(),
-  timeout: z.number().int().min(1000).max(60000).optional(),
-  retries: z.number().int().min(0).max(5).optional(),
+  input: z.string().min(API_KEY_VALIDATION.MIN_LENGTH).max(API_KEY_VALIDATION.MAX_LENGTH).optional(),
+  timeout: z.number().int().min(API_TIMEOUT.MIN).max(API_TIMEOUT.MAX).optional(),
+  retries: z.number().int().min(API_RETRIES.MIN).max(API_RETRIES.MAX).optional(),
 });
 
 const GetApiDetailSchema = z.object({
   key: z.string().optional(),
-  apiId: z.string().min(1).max(100),
-  timeout: z.number().int().min(1000).max(60000).optional(),
-  retries: z.number().int().min(0).max(5).optional(),
+  apiId: z.string().min(API_KEY_VALIDATION.API_ID_MIN_LENGTH).max(API_KEY_VALIDATION.API_ID_MAX_LENGTH),
+  timeout: z.number().int().min(API_TIMEOUT.MIN).max(API_TIMEOUT.MAX).optional(),
+  retries: z.number().int().min(API_RETRIES.MIN).max(API_RETRIES.MAX).optional(),
 });
 
 // ============================================================================
@@ -177,12 +212,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case TOOLS.getApiList.name: {
         const params = GetApiListSchema.parse(args);
-
-        // 确定 API Key
-        const apiKey = params.input || process.env.APIFOX_API_KEY || '';
-        if (!apiKey) {
-          throw new ValidationError('未提供 API Key，且环境变量 APIFOX_API_KEY 未设置');
-        }
+        const apiKey = resolveApiKey(params.input);
 
         // 调用客户端
         const result = await apifoxClient.getApiList(apiKey, {
@@ -191,30 +221,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         });
 
         if (!result.success) {
-          return {
-            content: [{
-              type: 'text' as const,
-              text: `❌ 获取 API 列表失败\n\n**错误**: ${result.error}\n\n**建议**:\n- 检查 API Key 或 URL 格式是否正确\n- 确认网络连接正常`,
-            }],
-          };
+          return formatErrorResponse(
+            '获取 API 列表失败',
+            result.error || '未知错误',
+            ['检查 API Key 或 URL 格式是否正确', '确认网络连接正常']
+          );
         }
 
-        return {
-          content: [{
-            type: 'text' as const,
-            text: `✅ 成功获取 API 文档列表\n\n**来源**: ${apiKey}\n**长度**: ${result.data?.length || 0} 字符\n\n---\n\n${result.data}`,
-          }],
-        };
+        return formatSuccessResponse(
+          '成功获取 API 文档列表',
+          result.data || '',
+          { 来源: apiKey, 长度: `${result.data?.length || 0} 字符` }
+        );
       }
 
       case TOOLS.getApiDetail.name: {
         const params = GetApiDetailSchema.parse(args);
-
-        // 确定 API Key（优先级：参数 > 环境变量）
-        const apiKey = params.key || process.env.APIFOX_API_KEY || '';
-        if (!apiKey) {
-          throw new ValidationError('未提供 API Key，且环境变量 APIFOX_API_KEY 未设置');
-        }
+        const apiKey = resolveApiKey(params.key);
 
         // 调用客户端
         const result = await apifoxClient.getApiDetail(apiKey, params.apiId, {
@@ -223,35 +246,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         });
 
         if (!result.success) {
-          return {
-            content: [{
-              type: 'text' as const,
-              text: `❌ 获取 API 详情失败\n\n**API ID**: \`${params.apiId}\`\n**错误**: ${result.error}\n\n**建议**:\n- 确认 API ID 存在于文档中\n- 检查 API ID 拼写是否正确`,
-            }],
-          };
+          return formatErrorResponse(
+            '获取 API 详情失败',
+            result.error || '未知错误',
+            [`确认 API ID \`${params.apiId}\` 存在于文档中`, '检查 API ID 拼写是否正确']
+          );
         }
 
-        return {
-          content: [{
-            type: 'text' as const,
-            text: `✅ 成功获取 API 详情\n\n**API ID**: \`${params.apiId}\`\n**长度**: ${result.data?.length || 0} 字符\n\n---\n\n${result.data}`,
-          }],
-        };
+        return formatSuccessResponse(
+          '成功获取 API 详情',
+          result.data || '',
+          { 'API ID': `\`${params.apiId}\``, 长度: `${result.data?.length || 0} 字符` }
+        );
       }
 
       case TOOLS.healthCheck.name: {
-        return {
-          content: [{
-            type: 'text' as const,
-            text: `✅ **Apifox MCP 服务器状态**
-
-**服务器版本**: ${SERVER_VERSION}
-**基础 URL**: ${baseUrl}
-**已配置 API Key**: ${hasApiKey ? '是' : '否'}
-**Node 环境**: ${process.env.NODE_ENV || 'production'}
-**可用工具**: ${Object.keys(TOOLS).length} 个`,
-          }],
-        };
+        return formatSuccessResponse(
+          '**Apifox MCP 服务器状态**',
+          '',
+          {
+            '服务器版本': SERVER_VERSION,
+            '基础 URL': baseUrl,
+            '已配置 API Key': hasApiKey ? '是' : '否',
+            'Node 环境': process.env.NODE_ENV || 'production',
+            '可用工具': `${Object.keys(TOOLS).length} 个`
+          }
+        );
       }
 
       default:
@@ -265,19 +285,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return {
         content: [{
           type: 'text' as const,
-          text: `❌ 参数验证失败\n\n${error.errors.map(e => `- ${e.path.join('.')}: ${e.message}`).join('\n')}`,
+          text: `❌ 参数验证失败\n\n${formatZodError(error)}`,
         }],
       };
     }
 
     // 处理其他错误
     const message = error instanceof Error ? error.message : String(error);
-    return {
-      content: [{
-        type: 'text' as const,
-        text: `❌ 服务器错误\n\n**工具**: ${name}\n**错误**: ${message}\n\n请检查输入参数或稍后重试。`,
-      }],
-    };
+    return formatServerError(name, message);
   }
 });
 
