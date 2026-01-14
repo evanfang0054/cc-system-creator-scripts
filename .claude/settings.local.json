@@ -32,7 +32,12 @@
       "Bash(pnpm:*)",
       "Bash(ls:*)",
       "Bash(git push:*)",
-      "Skill(doc-learner)"
+      "Skill(doc-learner)",
+      "Bash(git remote set-url:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []
