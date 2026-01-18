@@ -40,7 +40,10 @@
       "Bash(git reset:*)",
       "Bash(find:*)",
       "Bash(cloc:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Skill(planning-with-files)",
+      "Bash(mo --help:*)",
+      "Bash(mo clean --help:*)"
     ],
     "deny": [],
     "ask": []
