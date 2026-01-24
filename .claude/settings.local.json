@@ -43,7 +43,8 @@
       "Bash(pkill:*)",
       "Skill(planning-with-files)",
       "Bash(mo --help:*)",
-      "Bash(mo clean --help:*)"
+      "Bash(mo clean --help:*)",
+      "Skill(semantic-compressor)"
     ],
     "deny": [],
     "ask": []
