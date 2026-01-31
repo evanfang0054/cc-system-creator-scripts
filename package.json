@@ -7,7 +7,12 @@
     "build": "tsc",
     "start": "ts-node"
   },
-  "keywords": ["cc-system", "creator", "claude", "typescript"],
+  "keywords": [
+    "cc-system",
+    "creator",
+    "claude",
+    "typescript"
+  ],
   "author": "Evan Fang",
   "license": "MIT",
   "repository": {
@@ -19,15 +24,16 @@
   },
   "homepage": "https://github.com/evanfang0054/cc-system-creator-scripts#readme",
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/js-yaml": "^4.0.5",
     "@types/archiver": "^6.0.2",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^20.0.0",
     "ts-node": "^10.9.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
-    "archiver": "^6.0.1"
+    "archiver": "^6.0.1",
+    "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
     "yazl": "^2.5.1"

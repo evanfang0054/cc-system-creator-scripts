@@ -1,0 +1,50 @@
+{
+  "name": "skill-manager",
+  "version": "0.1.0",
+  "description": "多平台 AI Agent Skills 管理工具",
+  "type": "module",
+  "bin": {
+    "skill-manager": "./bin/run.js"
+  },
+  "scripts": {
+    "start": "node src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check .",
+    "format": "biome format . --write"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "cli-progress": "^3.12.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.0.0",
+    "cosmiconfig": "^9.0.0",
+    "ora": "^8.0.0",
+    "p-limit": "^5.0.0",
+    "semver": "^7.7.3",
+    "simple-git": "^3.30.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/cli-progress": "^3.11.6",
+    "@types/node": "^22.0.0",
+    "@types/semver": "^7.7.1",
+    "tsdown": "^0.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "src"
+  ],
+  "license": "MIT"
+}
