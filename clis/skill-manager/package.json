@@ -1,5 +1,5 @@
 {
-  "name": "skill-manager",
+  "name": "@efdev/skill-manager",
   "version": "0.1.0",
   "description": "多平台 AI Agent Skills 管理工具",
   "type": "module",
@@ -16,6 +16,16 @@
     "lint": "biome check .",
     "format": "biome format . --write"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evanfang0054/cc-system-creator-scripts.git",
+    "directory": "clis/skill-manager"
+  },
+  "bugs": {
+    "url": "https://github.com/evanfang0054/cc-system-creator-scripts/issues"
+  },
+  "homepage": "https://github.com/evanfang0054/cc-system-creator-scripts#readme",
+  "author": "evanfang",
   "engines": {
     "node": ">=18.0.0"
   },
