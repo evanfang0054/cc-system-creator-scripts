@@ -44,7 +44,12 @@
       "Skill(planning-with-files)",
       "Bash(mo --help:*)",
       "Bash(mo clean --help:*)",
-      "Skill(semantic-compressor)"
+      "Skill(semantic-compressor)",
+      "Skill(apifox-mock-script-gen)",
+      "mcp__apifox-api-docs-mcp__apifox_get_api_list",
+      "mcp__apifox-api-docs-mcp__apifox_get_api_detail",
+      "Bash(grep:*)",
+      "mcp__apifox-api-docs-mcp__apifox_health_check"
     ],
     "deny": [],
     "ask": []

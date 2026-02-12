@@ -31,14 +31,14 @@ description: 仔细彻底阅读探索用户提供的代码目录/文件，分析
 
 ### 4. 模板文件生成
 
-- 严格按照 `booking-{功能名称}-template.md` 格式生成
+- 严格按照 `{模块名称}-{功能名称}-template.Ai.md` 格式生成
 - 将代码片段保存到 ./fragment-extractor 目录下
 - 确保文件命名规范和内容结构一致性
 
 ### 5. 片段库索引生成
 
-- 在 ./fragment-extractor 目录下生成 `index.md` 文件
-- 按照 `- [文件名].md: [介绍]` 格式创建片段库文件目录
+- 在 ./fragment-extractor 目录下生成 `index.Ai.md` 文件
+- 按照 `- [文件名].Ai.md: [介绍]` 格式创建片段库文件目录
 - 为每个代码片段文件添加简短功能介绍
 
 ## 输出模板规范
@@ -46,7 +46,7 @@ description: 仔细彻底阅读探索用户提供的代码目录/文件，分析
 每个代码片段模板文件必须遵循以下结构：
 
 ```markdown
-# booking 流程[功能名称]代码实现片段
+# `[模块名称] 流程[功能名称]代码实现片段
 
 ## 功能描述
 [简要描述该代码片段的功能和用途]
@@ -84,9 +84,9 @@ description: 仔细彻底阅读探索用户提供的代码目录/文件，分析
 
 ### 文件命名规范
 
-- 使用 `booking-{功能名称}-template.md` 格式
+- 使用 `{模块名称}-{功能名称}-template.Ai.md` 格式
 - 功能名称使用英文，简洁明了地描述片段功能
-- 例如：`booking-form-validation-template.md`、`booking-user-interface-template.md`
+- 例如：`booking-form-validation-template.Ai.md`、`booking-user-interface-template.Ai.md`
 
 ### 代码片段提取原则
 
@@ -130,8 +130,8 @@ description: 仔细彻底阅读探索用户提供的代码目录/文件，分析
    - 从 `validation.ts` 提取表单验证函数
 
 3. **生成模板文件**：
-   - `booking-form-component-template.md`
-   - `booking-user-interface-template.md`
-   - `booking-validation-utils-template.md`
+   - `booking-form-component-template.Ai.md`
+   - `booking-user-interface-template.Ai.md`
+   - `booking-validation-utils-template.Ai.md`
 
 4. **确保格式一致**：每个文件都严格遵循标准模板结构

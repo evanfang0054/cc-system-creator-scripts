@@ -67,7 +67,6 @@ server.registerTool(
 - 获取 API ID 列表以调用 apifox_get_api_detail
 
 ## 参数说明
-- \`input\` (string): Apifox API 文档的 URL 或 UUID ${hasApiKey ? '(可选，默认使用已配置 Key)' : '(必需)'}
 - \`timeout\` (number): 请求超时时间（毫秒，${API_TIMEOUT.MIN}-${API_TIMEOUT.MAX}，默认 ${API_TIMEOUT.DEFAULT}）
 - \`retries\` (number): 重试次数（${API_RETRIES.MIN}-${API_RETRIES.MAX}，默认 ${API_RETRIES.DEFAULT}）
 
@@ -78,11 +77,11 @@ server.registerTool(
 - API Key 无效：返回 "错误：无效的 API Key 或 URL 格式"
 - 网络失败：返回 "错误：网络连接失败，请检查网络设置"`,
     inputSchema: z.object({
-      input: z.string()
-        .min(API_KEY_VALIDATION.MIN_LENGTH, `API Key 长度不能少于 ${API_KEY_VALIDATION.MIN_LENGTH} 个字符`)
-        .max(API_KEY_VALIDATION.MAX_LENGTH, `API Key 长度不能超过 ${API_KEY_VALIDATION.MAX_LENGTH} 个字符`)
-        .describe(`Apifox API 文档的 URL 或 UUID ${hasApiKey ? '(可选，默认使用已配置 Key)' : '(必需)'}`)
-        .optional(),
+      // input: z.string()
+      //   .min(API_KEY_VALIDATION.MIN_LENGTH, `API Key 长度不能少于 ${API_KEY_VALIDATION.MIN_LENGTH} 个字符`)
+      //   .max(API_KEY_VALIDATION.MAX_LENGTH, `API Key 长度不能超过 ${API_KEY_VALIDATION.MAX_LENGTH} 个字符`)
+      //   .describe(`Apifox API 文档的 URL 或 UUID ${hasApiKey ? '(可选，默认使用已配置 Key)' : '(必需)'}`)
+      //   .optional(),
       timeout: z.number()
         .int()
         .min(API_TIMEOUT.MIN, `超时时间不能少于 ${API_TIMEOUT.MIN} 毫秒`)
@@ -103,9 +102,9 @@ server.registerTool(
       openWorldHint: true
     }
   },
-  async ({ input, timeout, retries }) => {
+  async ({ timeout, retries }) => {
     try {
-      const apiKey = resolveApiKey(input);
+      const apiKey = resolveApiKey(); // 使用环境变量中的 API Key
       const result = await apifoxClient.getApiList(apiKey, { timeout, retries });
 
       if (!result.success) {
