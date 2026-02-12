@@ -67,7 +67,12 @@
       "Bash(git init:*)",
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Skill(apifox-mock-script-gen)",
+      "mcp__apifox-api-docs-mcp__apifox_get_api_list",
+      "mcp__apifox-api-docs-mcp__apifox_get_api_detail",
+      "Bash(grep:*)",
+      "mcp__apifox-api-docs-mcp__apifox_health_check"
     ],
     "deny": [],
     "ask": []
