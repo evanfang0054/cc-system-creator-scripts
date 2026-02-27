@@ -13,6 +13,7 @@ dist/
 dist-ssr
 *.local
 *-report*.md
+!.claude
 
 # Editor directories and files
 .vscode/*
