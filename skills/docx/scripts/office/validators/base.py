@@ -1,5 +1,5 @@
 """
-Base validator with common validation logic for document files.
+文档文件的基准验证器，包含通用验证逻辑。
 """
 
 import re
@@ -104,10 +104,10 @@ class BaseSchemaValidator:
         ]
 
         if not self.xml_files:
-            print(f"Warning: No XML files found in {self.unpacked_dir}")
+            print(f"警告：在 {self.unpacked_dir} 中未找到 XML 文件")
 
     def validate(self):
-        raise NotImplementedError("Subclasses must implement the validate method")
+        raise NotImplementedError("子类必须实现 validate 方法")
 
     def repair(self) -> int:
         return self.repair_whitespace_preservation()
@@ -128,7 +128,7 @@ class BaseSchemaValidator:
                             if elem.getAttribute("xml:space") != "preserve":
                                 elem.setAttribute("xml:space", "preserve")
                                 text_preview = repr(text[:30]) + "..." if len(text) > 30 else repr(text)
-                                print(f"  Repaired: {xml_file.name}: Added xml:space='preserve' to {elem.tagName}: {text_preview}")
+                                print(f"  已修复：{xml_file.name}: 为 {elem.tagName} 添加 xml:space='preserve': {text_preview}")
                                 repairs += 1
                                 modified = True
 
@@ -158,13 +158,13 @@ class BaseSchemaValidator:
                 )
 
         if errors:
-            print(f"FAILED - Found {len(errors)} XML violations:")
+            print(f"失败 - 发现 {len(errors)} 个 XML 违规：")
             for error in errors:
                 print(error)
             return False
         else:
             if self.verbose:
-                print("PASSED - All XML files are well-formed")
+                print("通过 - 所有 XML 文件格式正确")
             return True
 
     def validate_namespaces(self):
@@ -181,19 +181,19 @@ class BaseSchemaValidator:
                     undeclared = set(attr_val.split()) - declared
                     errors.extend(
                         f"  {xml_file.relative_to(self.unpacked_dir)}: "
-                        f"Namespace '{ns}' in Ignorable but not declared"
+                        f"命名空间 '{ns}' 在 Ignorable 中但未声明"
                         for ns in undeclared
                     )
             except lxml.etree.XMLSyntaxError:
                 continue
 
         if errors:
-            print(f"FAILED - {len(errors)} namespace issues:")
+            print(f"失败 - {len(errors)} 个命名空间问题：")
             for error in errors:
                 print(error)
             return False
         if self.verbose:
-            print("PASSED - All namespace prefixes properly declared")
+            print("通过 - 所有命名空间前缀已正确声明")
         return True
 
     def validate_unique_ids(self):
@@ -277,13 +277,13 @@ class BaseSchemaValidator:
                 )
 
         if errors:
-            print(f"FAILED - Found {len(errors)} ID uniqueness violations:")
+            print(f"失败 - 发现 {len(errors)} 个 ID 唯一性违规：")
             for error in errors:
                 print(error)
             return False
         else:
             if self.verbose:
-                print("PASSED - All required IDs are unique")
+                print("通过 - 所有必需的 ID 都是唯一的")
             return True
 
     def validate_file_references(self):
@@ -293,7 +293,7 @@ class BaseSchemaValidator:
 
         if not rels_files:
             if self.verbose:
-                print("PASSED - No .rels files found")
+                print("通过 - 未找到 .rels 文件")
             return True
 
         all_files = []
@@ -309,7 +309,7 @@ class BaseSchemaValidator:
 
         if self.verbose:
             print(
-                f"Found {len(rels_files)} .rels files and {len(all_files)} target files"
+                f"找到 {len(rels_files)} 个 .rels 文件和 {len(all_files)} 个目标文件"
             )
 
         for rels_file in rels_files:
@@ -351,34 +351,34 @@ class BaseSchemaValidator:
                     rel_path = rels_file.relative_to(self.unpacked_dir)
                     for broken_ref, line_num in broken_refs:
                         errors.append(
-                            f"  {rel_path}: Line {line_num}: Broken reference to {broken_ref}"
+                            f"  {rel_path}: 第 {line_num} 行：损坏的引用 {broken_ref}"
                         )
 
             except Exception as e:
                 rel_path = rels_file.relative_to(self.unpacked_dir)
-                errors.append(f"  Error parsing {rel_path}: {e}")
+                errors.append(f"  解析 {rel_path} 时出错：{e}")
 
         unreferenced_files = set(all_files) - all_referenced_files
 
         if unreferenced_files:
             for unref_file in sorted(unreferenced_files):
                 unref_rel_path = unref_file.relative_to(self.unpacked_dir)
-                errors.append(f"  Unreferenced file: {unref_rel_path}")
+                errors.append(f"  未引用的文件：{unref_rel_path}")
 
         if errors:
-            print(f"FAILED - Found {len(errors)} relationship validation errors:")
+            print(f"失败 - 发现 {len(errors)} 个关系验证错误：")
             for error in errors:
                 print(error)
             print(
-                "CRITICAL: These errors will cause the document to appear corrupt. "
-                + "Broken references MUST be fixed, "
-                + "and unreferenced files MUST be referenced or removed."
+                "严重：这些错误会导致文档显示为损坏。"
+                + "必须修复损坏的引用，"
+                + "未引用的文件必须被引用或删除。"
             )
             return False
         else:
             if self.verbose:
                 print(
-                    "PASSED - All references are valid and all files are properly referenced"
+                    "通过 - 所有引用有效且所有文件都被正确引用"
                 )
             return True
 
@@ -410,8 +410,8 @@ class BaseSchemaValidator:
                         if rid in rid_to_type:
                             rels_rel_path = rels_file.relative_to(self.unpacked_dir)
                             errors.append(
-                                f"  {rels_rel_path}: Line {rel.sourceline}: "
-                                f"Duplicate relationship ID '{rid}' (IDs must be unique)"
+                                f"  {rels_rel_path}: 第 {rel.sourceline} 行："
+                                f"重复的关系 ID '{rid}'（ID 必须唯一）"
                             )
                         type_name = (
                             rel_type.split("/")[-1] if "/" in rel_type else rel_type
@@ -434,9 +434,9 @@ class BaseSchemaValidator:
 
                         if rid_attr not in rid_to_type:
                             errors.append(
-                                f"  {xml_rel_path}: Line {elem.sourceline}: "
-                                f"<{elem_name}> r:{attr_name} references non-existent relationship '{rid_attr}' "
-                                f"(valid IDs: {', '.join(sorted(rid_to_type.keys())[:5])}{'...' if len(rid_to_type) > 5 else ''})"
+                                f"  {xml_rel_path}: 第 {elem.sourceline} 行："
+                                f"<{elem_name}> r:{attr_name} 引用了不存在的关系 '{rid_attr}' "
+                                f"（有效 ID：{', '.join(sorted(rid_to_type.keys())[:5])}{'...' if len(rid_to_type) > 5 else ''}）"
                             )
                         elif attr_name == "id" and self.ELEMENT_RELATIONSHIP_TYPES:
                             expected_type = self._get_expected_relationship_type(
@@ -453,17 +453,17 @@ class BaseSchemaValidator:
 
             except Exception as e:
                 xml_rel_path = xml_file.relative_to(self.unpacked_dir)
-                errors.append(f"  Error processing {xml_rel_path}: {e}")
+                errors.append(f"  处理 {xml_rel_path} 时出错：{e}")
 
         if errors:
-            print(f"FAILED - Found {len(errors)} relationship ID reference errors:")
+            print(f"失败 - 发现 {len(errors)} 个关系 ID 引用错误：")
             for error in errors:
                 print(error)
-            print("\nThese ID mismatches will cause the document to appear corrupt!")
+            print("\n这些 ID 不匹配会导致文档显示为损坏！")
             return False
         else:
             if self.verbose:
-                print("PASSED - All relationship ID references are valid")
+                print("通过 - 所有关系 ID 引用有效")
             return True
 
     def _get_expected_relationship_type(self, element_name):
@@ -494,7 +494,7 @@ class BaseSchemaValidator:
 
         content_types_file = self.unpacked_dir / "[Content_Types].xml"
         if not content_types_file.exists():
-            print("FAILED - [Content_Types].xml file not found")
+            print("失败 - 未找到 [Content_Types].xml 文件")
             return False
 
         try:
@@ -558,7 +558,7 @@ class BaseSchemaValidator:
 
                     if root_name in declarable_roots and path_str not in declared_parts:
                         errors.append(
-                            f"  {path_str}: File with <{root_name}> root not declared in [Content_Types].xml"
+                            f"  {path_str}：根元素为 <{root_name}> 的文件未在 [Content_Types].xml 中声明"
                         )
 
                 except Exception:
@@ -577,21 +577,21 @@ class BaseSchemaValidator:
                     if extension in media_extensions:
                         relative_path = file_path.relative_to(self.unpacked_dir)
                         errors.append(
-                            f'  {relative_path}: File with extension \'{extension}\' not declared in [Content_Types].xml - should add: <Default Extension="{extension}" ContentType="{media_extensions[extension]}"/>'
+                            f'  {relative_path}：扩展名为 \'{extension}\' 的文件未在 [Content_Types].xml 中声明 - 应添加：<Default Extension="{extension}" ContentType="{media_extensions[extension]}"/>'
                         )
 
         except Exception as e:
-            errors.append(f"  Error parsing [Content_Types].xml: {e}")
+            errors.append(f"  解析 [Content_Types].xml 时出错：{e}")
 
         if errors:
-            print(f"FAILED - Found {len(errors)} content type declaration errors:")
+            print(f"失败 - 发现 {len(errors)} 个内容类型声明错误：")
             for error in errors:
                 print(error)
             return False
         else:
             if self.verbose:
                 print(
-                    "PASSED - All content files are properly declared in [Content_Types].xml"
+                    "通过 - 所有内容文件已在 [Content_Types].xml 中正确声明"
                 )
             return True
 
@@ -621,7 +621,7 @@ class BaseSchemaValidator:
         if new_errors:
             if verbose:
                 relative_path = xml_file.relative_to(unpacked_dir)
-                print(f"FAILED - {relative_path}: {len(new_errors)} new error(s)")
+                print(f"失败 - {relative_path}：{len(new_errors)} 个新错误")
                 for error in list(new_errors)[:3]:
                     truncated = error[:250] + "..." if len(error) > 250 else error
                     print(f"  - {truncated}")
@@ -629,7 +629,7 @@ class BaseSchemaValidator:
         else:
             if verbose:
                 print(
-                    f"PASSED - No new errors (original had {len(current_errors)} errors)"
+                    f"通过 - 无新错误（原文件有 {len(current_errors)} 个错误）"
                 )
             return True, set()
 
@@ -663,23 +663,23 @@ class BaseSchemaValidator:
                 )
 
         if self.verbose:
-            print(f"Validated {len(self.xml_files)} files:")
-            print(f"  - Valid: {valid_count}")
-            print(f"  - Skipped (no schema): {skipped_count}")
+            print(f"已验证 {len(self.xml_files)} 个文件：")
+            print(f"  - 有效：{valid_count}")
+            print(f"  - 跳过（无模式）：{skipped_count}")
             if original_error_count:
-                print(f"  - With original errors (ignored): {original_error_count}")
+                print(f"  - 有原始错误（已忽略）：{original_error_count}")
             print(
-                f"  - With NEW errors: {len(new_errors) > 0 and len([e for e in new_errors if not e.startswith('    ')]) or 0}"
+                f"  - 有新错误：{len(new_errors) > 0 and len([e for e in new_errors if not e.startswith('    ')]) or 0}"
             )
 
         if new_errors:
-            print("\nFAILED - Found NEW validation errors:")
+            print("\n失败 - 发现新的验证错误：")
             for error in new_errors:
                 print(error)
             return False
         else:
             if self.verbose:
-                print("\nPASSED - No new XSD validation errors introduced")
+                print("\n通过 - 未引入新的 XSD 验证错误")
             return True
 
     def _get_schema_path(self, xml_file):
@@ -825,7 +825,7 @@ class BaseSchemaValidator:
             if matches:
                 for match in matches:
                     warnings.append(
-                        f"Found template tag in {content_type}: {match.group()}"
+                        f"在 {content_type} 中发现模板标签：{match.group()}"
                     )
                 return template_pattern.sub("", text)
             return text
@@ -844,4 +844,4 @@ class BaseSchemaValidator:
 
 
 if __name__ == "__main__":
-    raise RuntimeError("This module should not be run directly.")
+    raise RuntimeError("此模块不应直接运行。")

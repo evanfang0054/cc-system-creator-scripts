@@ -91,12 +91,12 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                                 )
                                 errors.append(
                                     f"  {xml_file.relative_to(self.unpacked_dir)}: "
-                                    f"Line {elem.sourceline}: w:t element with whitespace missing xml:space='preserve': {text_preview}"
+                                    f"行 {elem.sourceline}: w:t 元素包含空白字符但缺少 xml:space='preserve': {text_preview}"
                                 )
 
             except (lxml.etree.XMLSyntaxError, Exception) as e:
                 errors.append(
-                    f"  {xml_file.relative_to(self.unpacked_dir)}: Error: {e}"
+                    f"  {xml_file.relative_to(self.unpacked_dir)}: 错误: {e}"
                 )
 
         if errors:
@@ -129,7 +129,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                         )
                         errors.append(
                             f"  {xml_file.relative_to(self.unpacked_dir)}: "
-                            f"Line {t_elem.sourceline}: <w:t> found within <w:del>: {text_preview}"
+                            f"行 {t_elem.sourceline}: 在 <w:del> 中发现 <w:t>: {text_preview}"
                         )
 
                 for instr_elem in root.xpath(
@@ -142,12 +142,12 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                     )
                     errors.append(
                         f"  {xml_file.relative_to(self.unpacked_dir)}: "
-                        f"Line {instr_elem.sourceline}: <w:instrText> found within <w:del> (use <w:delInstrText>): {text_preview}"
+                        f"行 {instr_elem.sourceline}: 在 <w:del> 中发现 <w:instrText> (应使用 <w:delInstrText>): {text_preview}"
                     )
 
             except (lxml.etree.XMLSyntaxError, Exception) as e:
                 errors.append(
-                    f"  {xml_file.relative_to(self.unpacked_dir)}: Error: {e}"
+                    f"  {xml_file.relative_to(self.unpacked_dir)}: 错误: {e}"
                 )
 
         if errors:
@@ -222,12 +222,12 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                     )
                     errors.append(
                         f"  {xml_file.relative_to(self.unpacked_dir)}: "
-                        f"Line {elem.sourceline}: <w:delText> within <w:ins>: {text_preview}"
+                        f"行 {elem.sourceline}: 在 <w:ins> 中发现 <w:delText>: {text_preview}"
                     )
 
             except (lxml.etree.XMLSyntaxError, Exception) as e:
                 errors.append(
-                    f"  {xml_file.relative_to(self.unpacked_dir)}: Error: {e}"
+                    f"  {xml_file.relative_to(self.unpacked_dir)}: 错误: {e}"
                 )
 
         if errors:
@@ -246,7 +246,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
 
         diff = new_count - original_count
         diff_str = f"+{diff}" if diff > 0 else str(diff)
-        print(f"\nParagraphs: {original_count} → {new_count} ({diff_str})")
+        print(f"\n段落数: {original_count} → {new_count} ({diff_str})")
 
     def _parse_id_value(self, val: str, base: int = 16) -> int:
         return int(val, base)
@@ -262,7 +262,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                     if val := elem.get(para_id_attr):
                         if self._parse_id_value(val, base=16) >= 0x80000000:
                             errors.append(
-                                f"  {xml_file.name}:{elem.sourceline}: paraId={val} >= 0x80000000"
+                                f"  {xml_file.name}:{elem.sourceline}: paraId={val} >= 0x80000000 (超出范围)"
                             )
 
                     if val := elem.get(durable_id_attr):
@@ -271,28 +271,28 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                                 if self._parse_id_value(val, base=10) >= 0x7FFFFFFF:
                                     errors.append(
                                         f"  {xml_file.name}:{elem.sourceline}: "
-                                        f"durableId={val} >= 0x7FFFFFFF"
+                                        f"durableId={val} >= 0x7FFFFFFF (超出范围)"
                                     )
                             except ValueError:
                                 errors.append(
                                     f"  {xml_file.name}:{elem.sourceline}: "
-                                    f"durableId={val} must be decimal in numbering.xml"
+                                    f"durableId={val} 在 numbering.xml 中必须为十进制格式"
                                 )
                         else:
                             if self._parse_id_value(val, base=16) >= 0x7FFFFFFF:
                                 errors.append(
                                     f"  {xml_file.name}:{elem.sourceline}: "
-                                    f"durableId={val} >= 0x7FFFFFFF"
+                                    f"durableId={val} >= 0x7FFFFFFF (超出范围)"
                                 )
             except Exception:
                 pass
 
         if errors:
-            print(f"FAILED - {len(errors)} ID constraint violations:")
+            print(f"失败 - {len(errors)} 个 ID 约束违规:")
             for e in errors:
                 print(e)
         elif self.verbose:
-            print("PASSED - All paraId/durableId values within constraints")
+            print("通过 - 所有 paraId/durableId 值均在约束范围内")
         return not errors
 
     def validate_comment_markers(self):
@@ -308,7 +308,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
 
         if not document_xml:
             if self.verbose:
-                print("PASSED - No document.xml found (skipping comment validation)")
+                print("通过 - 未找到 document.xml (跳过注释验证)")
             return True
 
         try:
@@ -339,7 +339,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                 orphaned_ends, key=lambda x: int(x) if x and x.isdigit() else 0
             ):
                 errors.append(
-                    f'  document.xml: commentRangeEnd id="{comment_id}" has no matching commentRangeStart'
+                    f'  document.xml: commentRangeEnd id="{comment_id}" 没有匹配的 commentRangeStart'
                 )
 
             orphaned_starts = range_starts - range_ends
@@ -347,7 +347,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                 orphaned_starts, key=lambda x: int(x) if x and x.isdigit() else 0
             ):
                 errors.append(
-                    f'  document.xml: commentRangeStart id="{comment_id}" has no matching commentRangeEnd'
+                    f'  document.xml: commentRangeStart id="{comment_id}" 没有匹配的 commentRangeEnd'
                 )
 
             comment_ids = set()
@@ -365,22 +365,22 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                 for comment_id in sorted(
                     invalid_refs, key=lambda x: int(x) if x and x.isdigit() else 0
                 ):
-                    if comment_id:  
+                    if comment_id:
                         errors.append(
-                            f'  document.xml: marker id="{comment_id}" references non-existent comment'
+                            f'  document.xml: 标记 id="{comment_id}" 引用了不存在的注释'
                         )
 
         except (lxml.etree.XMLSyntaxError, Exception) as e:
-            errors.append(f"  Error parsing XML: {e}")
+            errors.append(f"  解析 XML 时出错: {e}")
 
         if errors:
-            print(f"FAILED - {len(errors)} comment marker violations:")
+            print(f"失败 - {len(errors)} 个注释标记违规:")
             for error in errors:
                 print(error)
             return False
         else:
             if self.verbose:
-                print("PASSED - All comment markers properly paired")
+                print("通过 - 所有注释标记配对正确")
             return True
 
     def repair(self) -> int:
@@ -428,7 +428,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
 
                         elem.setAttribute("w16cid:durableId", new_id)
                         print(
-                            f"  Repaired: {xml_file.name}: durableId {durable_id} → {new_id}"
+                            f"  已修复: {xml_file.name}: durableId {durable_id} → {new_id}"
                         )
                         repairs += 1
                         modified = True
