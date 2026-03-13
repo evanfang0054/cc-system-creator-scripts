@@ -72,7 +72,9 @@
       "mcp__apifox-api-docs-mcp__apifox_get_api_list",
       "mcp__apifox-api-docs-mcp__apifox_get_api_detail",
       "Bash(grep:*)",
-      "mcp__apifox-api-docs-mcp__apifox_health_check"
+      "mcp__apifox-api-docs-mcp__apifox_health_check",
+      "Bash(env | grep -i zai 2>/dev/null || echo \"未找到 ZAI 相关环境变量\")",
+      "Bash(claude mcp remove zai-mcp-server)"
     ],
     "deny": [],
     "ask": []
